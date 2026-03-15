@@ -1,0 +1,24 @@
+{
+  "target_countries": ["DEU", "FRA", "NLD", "BEL", "LUX", "IRL"],
+  "target_cpv_prefixes": ["331", "429", "5042", "341", "452"],
+  "keywords": {
+    "include": ["medical", "robot", "maintenance", "software", "construction"],
+    "exclude": ["translation", "catering"]
+  },
+  "value_range_eur": {
+    "min": 50000,
+    "max": 5000000
+  },
+  "deadline_window_days": {
+    "min": 0,
+    "max": 45
+  },
+  "weights": {
+    "country": 20,
+    "cpv": 25,
+    "keywords": 25,
+    "value": 15,
+    "deadline": 15
+  },
+  "decision_threshold": 60
+}
