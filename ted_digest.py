@@ -71,22 +71,30 @@ def build_why_matched(notice: Dict[str, Any]) -> str:
     evidence = deterministic.get("evidence", {})
     reasons: List[str] = []
 
-    if filters.get("country_ok"):
-        reasons.append(f"country={evidence.get('country', 'N/A')}")
+    keyword_hits = (evidence.get("hard_keywords_hit") or []) + (evidence.get("soft_keywords_hit") or [])
+    cpvs = evidence.get("cpv_codes") or []
     if filters.get("cpv_ok"):
-        cpvs = evidence.get("cpv_codes") or []
-        reasons.append(f"cpv={','.join(cpvs[:3])}" if cpvs else "cpv=matched")
-    if filters.get("keywords_ok"):
-        hits = evidence.get("include_keywords_hit") or []
-        reasons.append(f"keywords={','.join(hits[:3])}" if hits else "keywords=matched")
+        reasons.append(f"Technical scope aligns with target CPV families ({','.join(cpvs[:2]) if cpvs else 'matched'}).")
+    if keyword_hits:
+        reasons.append(f"Scope language indicates likely fit ({', '.join(keyword_hits[:3])}).")
+    if filters.get("country_ok"):
+        reasons.append(f"Buyer geography is in target coverage ({evidence.get('country', 'N/A')}).")
     if filters.get("value_ok"):
-        reasons.append(f"value={format_value(evidence.get('estimated_value_eur'))}")
+        lot_values = evidence.get("lot_values_eur") or []
+        if filters.get("value_ok_lot") and lot_values:
+            reasons.append(f"At least one lot is in commercial value range ({format_value(lot_values[0])}).")
+        else:
+            reasons.append(f"Contract value is inside target range ({format_value(evidence.get('estimated_value_eur'))}).")
     if filters.get("deadline_ok"):
-        reasons.append(f"deadline={evidence.get('deadline_at')}")
+        lot_deadlines = evidence.get("lot_deadlines") or []
+        if filters.get("deadline_ok_lot") and lot_deadlines:
+            reasons.append(f"Submission window appears actionable for at least one lot ({lot_deadlines[0]}).")
+        else:
+            reasons.append(f"Submission window appears actionable ({evidence.get('deadline_at')}).")
 
     if not reasons:
-        return "Low-confidence match; manual review recommended."
-    return "; ".join(reasons)
+        return "Low-confidence fit; no strong commercial signal detected yet."
+    return " ".join(reasons[:3])
 
 
 def build_digest_markdown(scored: List[Dict[str, Any]], top_n: int) -> str:
@@ -106,6 +114,24 @@ def build_digest_markdown(scored: List[Dict[str, Any]], top_n: int) -> str:
         value = format_value(notice.get("estimated_value_eur"))
         link = extract_notice_url(notice) or "N/A"
         score = notice.get("relevance_score", 0)
+        notice_score = notice.get("notice_score", score)
+        best_lot_score = notice.get("best_lot_score", 0)
+        decision = notice.get("decision", "no_bid")
+        confidence = "high" if float(score) >= 75 else ("medium" if float(score) >= 55 else "low")
+        blockers = []
+        filters = notice.get("deterministic", {}).get("filters", {})
+        if not filters.get("deadline_ok"):
+            blockers.append("missing_or_out_of_window_deadline")
+        if not filters.get("value_ok") and not filters.get("value_neutral_on_missing"):
+            blockers.append("value_outside_target_range")
+        if not filters.get("country_ok"):
+            blockers.append("country_outside_target")
+        top_blocker = blockers[0] if blockers else "none"
+        next_step = (
+            "Review tender docs and launch qualification checklist."
+            if decision == "bid"
+            else "Keep watchlisted and reassess if strategy changes."
+        )
 
         lines.append(f"## {idx}. {notice.get('notice_id', 'unknown-id')} (score: {score})")
         lines.append("")
@@ -115,6 +141,11 @@ def build_digest_markdown(scored: List[Dict[str, Any]], top_n: int) -> str:
         lines.append(f"3) {summary[2]}")
         lines.append("")
         lines.append(f"Why it matched: {why}")
+        lines.append(f"Scoring view: notice={notice_score}, best_lot={best_lot_score}")
+        lines.append(f"Recommendation: {decision}")
+        lines.append(f"Confidence: {confidence}")
+        lines.append(f"Top blocker: {top_blocker}")
+        lines.append(f"Next step: {next_step}")
         lines.append(f"Deadline: {deadline}")
         lines.append(f"Value: {value}")
         lines.append(f"Link: {link}")

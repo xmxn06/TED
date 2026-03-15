@@ -1,9 +1,9 @@
 {
   "target_countries": ["DEU", "FRA", "ITA", "ESP", "NLD", "BEL", "DNK", "SWE", "FIN", "NOR", "POL", "CZE", "SVK", "ROU", "GRC"],
-  "target_cpv_prefixes": ["356", "347", "357", "355", "7342", "7343", "5066", "3496", "3811", "3812", "7971", "79713", "7222", "7226"],
+  "target_cpv_prefixes": ["356", "347", "357", "355", "7342", "7343", "5066", "3496", "3811", "3812", "7971", "79713"],
   "keywords": {
     "hard_include": ["defence", "defense", "aerospace", "avionics", "drone", "uav", "satellite", "radar", "electronic warfare", "command and control", "c4isr"],
-    "soft_include": ["secure communications", "counter-uav", "air surveillance", "military", "mission system", "flight control", "targeting", "sensor fusion"],
+    "soft_include": ["secure communications", "counter-uav", "air surveillance", "military", "mission system", "flight control", "navigation", "maintenance", "simulation", "space"],
     "exclude": ["hospital", "medical consumables", "school meal", "catering", "translation", "cleaning services"],
     "hard_required": false,
     "soft_match_ratio": 0.65
@@ -19,11 +19,6 @@
   "value_neutral_on_missing": true,
   "lot_scoring": {
     "enabled": true
-  },
-  "score_aggregation": {
-    "method": "blended",
-    "notice_weight": 0.7,
-    "lot_weight": 0.3
   },
   "weights": {
     "country": 20,

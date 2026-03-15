@@ -1,0 +1,19 @@
+{
+  "icp_name": "defense_hardware_sensors",
+  "window_days": 21,
+  "cpv_prefixes": ["356", "355", "3581"],
+  "title_or_buyer_include": [],
+  "exclude_keywords": [
+    "medical",
+    "hospital",
+    "bread",
+    "canteen",
+    "uniform",
+    "firefighting",
+    "surveying",
+    "geodetic",
+    "forestry",
+    "park",
+    "cleaning"
+  ]
+}

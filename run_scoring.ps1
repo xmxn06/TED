@@ -3,4 +3,4 @@ $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
-python .\ted_score.py --config .\scoring_config.json
+python .\ted_score.py --config .\configs\scoring_defense_hardware_sensors.json

@@ -1,0 +1,31 @@
+{
+  "target_countries": ["DEU", "FRA", "ITA", "ESP", "NLD", "BEL", "SWE", "FIN", "DNK", "POL", "CZE", "PRT", "AUT", "IRL"],
+  "target_cpv_prefixes": ["3473", "3474", "3475", "34731", "5021", "50211", "50212", "3561", "3562", "6044", "6373"],
+  "keywords": {
+    "hard_include": ["avionics", "aircraft maintenance", "flight systems", "airframe", "engine overhaul", "mro", "ground support equipment"],
+    "soft_include": ["aerospace", "certification", "airworthiness", "inspection", "mission avionics", "line maintenance", "component repair"],
+    "exclude": ["hospital", "catering", "translation", "building cleaning"],
+    "hard_required": false,
+    "soft_match_ratio": 0.7
+  },
+  "value_range_eur": {
+    "min": 150000,
+    "max": 120000000
+  },
+  "deadline_window_days": {
+    "min": 0,
+    "max": 75
+  },
+  "value_neutral_on_missing": true,
+  "lot_scoring": {
+    "enabled": true
+  },
+  "weights": {
+    "country": 20,
+    "cpv": 32,
+    "keywords": 28,
+    "value": 10,
+    "deadline": 15
+  },
+  "decision_threshold": 60
+}

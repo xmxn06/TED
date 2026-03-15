@@ -1,0 +1,31 @@
+{
+  "target_countries": ["DEU", "FRA", "NLD", "BEL", "LUX", "DNK", "SWE", "FIN", "ITA", "ESP", "POL", "CZE", "EST", "LVA", "LTU"],
+  "target_cpv_prefixes": ["7221", "7222", "7226", "72212", "72222", "72262", "7231", "4873", "4890", "3021", "3255", "3572"],
+  "keywords": {
+    "hard_include": ["secure communications", "command and control", "c4isr", "mission software", "cyber defence", "signal intelligence"],
+    "soft_include": ["defence software", "tactical data link", "air surveillance", "edge processing", "encrypted", "situational awareness"],
+    "exclude": ["crm", "erp", "school management", "hospital information system", "translation"],
+    "hard_required": false,
+    "soft_match_ratio": 0.7
+  },
+  "value_range_eur": {
+    "min": 100000,
+    "max": 80000000
+  },
+  "deadline_window_days": {
+    "min": 0,
+    "max": 60
+  },
+  "value_neutral_on_missing": true,
+  "lot_scoring": {
+    "enabled": true
+  },
+  "weights": {
+    "country": 20,
+    "cpv": 28,
+    "keywords": 32,
+    "value": 10,
+    "deadline": 15
+  },
+  "decision_threshold": 61
+}
